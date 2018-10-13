@@ -17,6 +17,7 @@ public class VentanaJuego extends JFrame {
 	MundoJuego miMundo;        // Mundo del juego
 	CocheJuego miCoche;        // Coche del juego
 	MiRunnable miHilo = null;  // Hilo del bucle principal de juego	
+	boolean [] pulsados = new boolean [4];
 
 	/** Constructor de la ventana de juego. Crea y devuelve la ventana inicializada
 	 * sin coches dentro
@@ -76,28 +77,82 @@ public class VentanaJuego extends JFrame {
 		});
 		
 		// Añadido para que también se gestione por teclado con el KeyListener
-		pPrincipal.addKeyListener( new KeyAdapter() {
+//		pPrincipal.addKeyListener( new KeyAdapter() {
+//			@Override
+//			public void keyPressed(KeyEvent e) {
+//				switch (e.getKeyCode()) {
+//					case KeyEvent.VK_UP: {
+//						miCoche.acelera( +5, 1 );
+//						break;
+//					}
+//					case KeyEvent.VK_DOWN: {
+//						miCoche.acelera( -5, 1 );
+//						break;
+//					}
+//					case KeyEvent.VK_LEFT: {
+//						miCoche.gira( +10 );
+//						break;
+//					}
+//					case KeyEvent.VK_RIGHT: {
+//						miCoche.gira( -10 );
+//						break;
+//					}
+//				}
+//			}
+//		});
+		
+		pPrincipal.addKeyListener(new KeyAdapter()
+		{
+
 			@Override
-			public void keyPressed(KeyEvent e) {
-				switch (e.getKeyCode()) {
-					case KeyEvent.VK_UP: {
-						miCoche.acelera( +5, 1 );
-						break;
-					}
-					case KeyEvent.VK_DOWN: {
-						miCoche.acelera( -5, 1 );
-						break;
-					}
-					case KeyEvent.VK_LEFT: {
-						miCoche.gira( +10 );
-						break;
-					}
-					case KeyEvent.VK_RIGHT: {
-						miCoche.gira( -10 );
-						break;
-					}
+			public void keyPressed(KeyEvent e) 
+			{
+				if(e.getKeyCode()==KeyEvent.VK_UP)
+				{
+					pulsados[0] = true;
+				}
+				if(e.getKeyCode()==KeyEvent.VK_DOWN)
+				{
+					pulsados[1] = true;
+				}
+				if(e.getKeyCode()==KeyEvent.VK_LEFT)
+				{
+					pulsados[2] = true;
+				}
+				if(e.getKeyCode()==KeyEvent.VK_RIGHT)
+				{
+					pulsados[3] = true;
 				}
 			}
+
+			@Override
+			public void keyReleased(KeyEvent e) 
+			{
+				if(e.getKeyCode()==KeyEvent.VK_UP)
+				{
+					pulsados[0] = false;
+				}
+				if(e.getKeyCode()==KeyEvent.VK_DOWN)
+				{
+					pulsados[1] = false;
+				}
+				if(e.getKeyCode()==KeyEvent.VK_LEFT)
+				{
+					pulsados[2] = false;
+				}
+				if(e.getKeyCode()==KeyEvent.VK_RIGHT)
+				{
+					pulsados[3] = false;
+				}
+			}
+
+			@Override
+			public void keyTyped(KeyEvent arg0) 
+			{
+				// TODO Auto-generated method stub
+				super.keyTyped(arg0);
+			}
+			
 		});
 		pPrincipal.setFocusable(true);
 		pPrincipal.requestFocus();
@@ -160,7 +215,28 @@ public class VentanaJuego extends JFrame {
 					miMundo.rebotaHorizontal(miCoche);
 				if (miMundo.hayChoqueVertical(miCoche)) // Espejo vertical si choca en Y
 					miMundo.rebotaVertical(miCoche);
-				// Dormir el hilo 40 milisegundos
+				
+			
+				if(pulsados[0] == true)
+				{
+					miCoche.acelera(+5, 1);
+				}
+				
+				if(pulsados[1] == true)
+				{
+					miCoche.acelera(-5, 1);
+				}
+				
+				if(pulsados[2] == true)
+				{
+					miCoche.gira(+10);
+				}
+				
+				if(pulsados[3] == true)
+				{
+					miCoche.gira(-10);
+				}
+				
 				try {
 					Thread.sleep( 40 );
 				} catch (Exception e) {
